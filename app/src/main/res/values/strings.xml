@@ -1,5 +1,14 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Bookshelf</string>
     <string name="string_chinese">Chinese</string>
     <string name="string_english">English</string>
+
+    <string name="confirmation">Confirmation</string>
+    <string name="sure_to_delete">Are you sure to delete this item</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="str_price">Price</string>
+    <string name="str_title">Title</string>
+    <string name="str_name">Name</string>
+    <string name="submit">Add</string>
 </resources>
