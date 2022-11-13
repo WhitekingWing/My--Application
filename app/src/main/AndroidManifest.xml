@@ -11,11 +11,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SuperShopper"
+        android:theme="@style/Theme.Bookshelf"
         tools:targetApi="31">
 
-        <activity android:name=".InputShopItemActivity"
-            android:exported="true"></activity>
+        <activity android:name=".AddChangeItemActivity"
+            android:exported="true"
+            android:label="@string/edit_book_item_name">
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">

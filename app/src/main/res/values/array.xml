@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ReadingStatus">
+        <item>@string/status_first</item>
+        <item>@string/status_second</item>
+    </string-array>
+    <string-array name="BookShelfNumber">
+        <item>Default BookShelf</item>
+        <item>The First BookShelf</item>
+        <item>The Second BookShelf</item>
+        <item>The Third BookShelf</item>
+        <item>The Fourth BookShelf</item>
+    </string-array>
+</resources>

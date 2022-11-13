@@ -8,7 +8,15 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="str_price">Price</string>
-    <string name="str_title">Title</string>
+    <string name="str_title">Name</string>
     <string name="str_name">Name</string>
     <string name="submit">Add</string>
+    <string name="str_author">Author</string>
+    <string name="str_translator">Translator</string>
+    <string name="str_publisher">Publisher</string>
+    <string name="str_pubDate">PubDate</string>
+    <string name="str_isbn">ISBN</string>
+    <string name="edit_book_item_name">Edit Book Detail</string>
+    <string name="status_first">Reading</string>
+    <string name="status_second">Idle</string>
 </resources>

@@ -10,7 +10,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class DataSaver {
-    public void Save(Context context, ArrayList<ShopItem> data)
+    public void Save(Context context, ArrayList<BookDetails> data)
     {
         try {
 
@@ -24,13 +24,13 @@ public class DataSaver {
         }
     }
     @NonNull
-    public ArrayList<ShopItem> Load(Context context)
+    public ArrayList<BookDetails> Load(Context context)
     {
-        ArrayList<ShopItem> data=new ArrayList<>();
+        ArrayList<BookDetails> data=new ArrayList<>();
         try {
             FileInputStream fileIn = context.openFileInput("mydata.dat");
             ObjectInputStream in = new ObjectInputStream(fileIn);
-            data = (ArrayList<ShopItem>) in.readObject();
+            data = (ArrayList<BookDetails>) in.readObject();
             in.close();
             fileIn.close();
         } catch (Exception e) {
