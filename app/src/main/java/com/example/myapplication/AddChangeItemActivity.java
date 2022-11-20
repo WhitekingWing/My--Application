@@ -27,7 +27,6 @@ public class AddChangeItemActivity extends AppCompatActivity{
         setContentView(R.layout.activity_add_change_item);
         position= this.getIntent().getIntExtra("position",0);
         String title=this.getIntent().getStringExtra("title");
-        Double price=this.getIntent().getDoubleExtra("price",0);
         String author = this.getIntent().getStringExtra("author");
         String translator = this.getIntent().getStringExtra("translator");
         String publisher = this.getIntent().getStringExtra("publisher");
@@ -39,10 +38,10 @@ public class AddChangeItemActivity extends AppCompatActivity{
         String notes = this.getIntent().getStringExtra("notes");
         String law = this.getIntent().getStringExtra("law");
         String hyperlink = this.getIntent().getStringExtra("hyperlink");
+        String content = this.getIntent().getStringExtra("content");
         Spinner spinner_one = findViewById(R.id.Spinner_one);
         Spinner spinner_two = findViewById(R.id.Spinner_two);
         EditText editTextTitle=findViewById(R.id.edittext_book_item_title);
-        EditText editTextPrice=findViewById(R.id.edittext_book_item_price);
         EditText editTextAuthor=findViewById(R.id.edittext_book_item_author);
         EditText editTextTranslator=findViewById(R.id.edittext_book_item_translator);
         EditText editTextPublisher=findViewById(R.id.edittext_book_item_publisher);
@@ -81,7 +80,6 @@ public class AddChangeItemActivity extends AppCompatActivity{
         if(null!=title)
         {
             editTextTitle.setText(title);
-            editTextPrice.setText(price.toString());
             editTextAuthor.setText(author);
             editTextTranslator.setText(translator);
             editTextPublisher.setText(publisher);
@@ -102,7 +100,6 @@ public class AddChangeItemActivity extends AppCompatActivity{
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);  //添加返回的图标
-
         Button buttonOk=findViewById(R.id.button_ok);
         buttonOk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,8 +107,6 @@ public class AddChangeItemActivity extends AppCompatActivity{
                 Intent intent=new Intent();
                 Bundle bundle=new Bundle();
                 bundle.putString("title",editTextTitle.getText().toString());
-                //double price=Double.parseDouble( editTextPrice.getText().toString());
-                //bundle.putDouble("price",price);
                 bundle.putString("author",editTextAuthor.getText().toString());
                 bundle.putInt("position",position);
                 bundle.putString("translator",editTextTranslator.getText().toString());
@@ -127,6 +122,7 @@ public class AddChangeItemActivity extends AppCompatActivity{
                 bundle.putString("notes",editTextNotes.getText().toString());
                 bundle.putString("law",editTextLaw.getText().toString());
                 bundle.putString("hyperlink",editTextHyperlink.getText().toString());
+                bundle.putString("content",content);
                 intent.putExtras(bundle);
                 setResult(RESULT_CODE_SUCCESS,intent);
                 AddChangeItemActivity.this.finish();

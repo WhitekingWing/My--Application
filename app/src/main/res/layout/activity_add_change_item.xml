@@ -47,36 +47,6 @@
                 tools:layout_editor_absoluteY="217dp" />
 
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <LinearLayout
-                android:layout_width="126dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical"></LinearLayout>
-
-            <TextView
-                android:id="@+id/textViewPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/str_price"
-                tools:layout_editor_absoluteX="97dp"
-                tools:layout_editor_absoluteY="225dp" />
-
-            <EditText
-                android:id="@+id/edittext_book_item_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="1.0"
-                tools:ignore="TouchTargetSizeCheck"
-                tools:layout_editor_absoluteX="165dp"
-                tools:layout_editor_absoluteY="217dp" />
-
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -302,7 +272,7 @@
                     android:layout_width="64dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:srcCompat="@mipmap/reading_status" />
+                    app:srcCompat="@drawable/ic_readingstatus" />
             </LinearLayout>
 
             <Spinner
@@ -332,7 +302,7 @@
                     android:layout_width="64dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:srcCompat="@mipmap/book_shelf_number" />
+                    app:srcCompat="@drawable/ic_bookshelf" />
             </LinearLayout>
 
             <Spinner
@@ -383,7 +353,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            app:srcCompat="@mipmap/note" />
+                            app:srcCompat="@drawable/ic_note" />
 
                     </LinearLayout>
                     <LinearLayout
@@ -446,7 +416,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            app:srcCompat="@mipmap/label" />
+                            app:srcCompat="@drawable/ic_label" />
 
                     </LinearLayout>
                     <LinearLayout
@@ -509,7 +479,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            app:srcCompat="@mipmap/hyperlink" />
+                            app:srcCompat="@drawable/ic_hyperlink" />
 
                     </LinearLayout>
                     <LinearLayout
@@ -541,7 +511,7 @@
             android:id="@+id/button_ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ok"></Button>
+            android:text="Save"></Button>
 
     </LinearLayout>
 </FrameLayout>

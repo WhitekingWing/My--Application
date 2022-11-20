@@ -14,10 +14,10 @@
         android:theme="@style/Theme.Bookshelf"
         tools:targetApi="31">
 
-        <activity android:name=".AddChangeItemActivity"
+        <activity
+            android:name=".AddChangeItemActivity"
             android:exported="true"
-            android:label="@string/edit_book_item_name">
-        </activity>
+            android:label="@string/edit_book_item_name"></activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">
