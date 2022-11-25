@@ -4,7 +4,7 @@ package com.example.myapplication.data;
 import java.io.Serializable;
 
 public class BookDetails implements Serializable {
-    public BookDetails(String title, int resourceId,String author,String translator,String publisher,int pubYear,int pubMonth,String ISBN,String status,String bookShelf,String notes,String law,String hyperlink) {
+    public BookDetails(String title, int resourceId,String author,String translator,String publisher,int pubYear,int pubMonth,String ISBN,String status,String bookShelf,String notes,String law,String hyperlink,int position) {
         this.title = title;
         this.resourceId = resourceId;
         this.author = author;
@@ -18,7 +18,17 @@ public class BookDetails implements Serializable {
         this.notes = notes;
         this.law = law;
         this.hyperlink = hyperlink;
+        this.position = position;
     }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -125,4 +135,5 @@ public class BookDetails implements Serializable {
     private String notes;
     private String law;
     private String hyperlink;
+    int position;
 }

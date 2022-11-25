@@ -430,16 +430,13 @@
 
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/edittext_book_item_label"
+            <Spinner
+                android:id="@+id/Spinner_three"
                 android:layout_width="348dp"
-                android:layout_height="50dp"
-                android:inputType="textPersonName"
-                android:text="Law"
-                android:textColor="@color/gray"
-                tools:ignore="TouchTargetSizeCheck"
-                tools:layout_editor_absoluteX="165dp"
-                tools:layout_editor_absoluteY="217dp" />
+                android:layout_height="wrap_content"
+                android:entries="@array/Label"
+                android:spinnerMode="dropdown"
+                tools:ignore="TouchTargetSizeCheck" />
 
 
         </LinearLayout>

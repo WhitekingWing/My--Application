@@ -1,18 +1,25 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class TitleLayout extends LinearLayout {
+public class TitleLayout extends LinearLayout{
     private DrawerLayout mDraw;
     private NavigationView navView;//导航视图
     public TitleLayout(Context context, AttributeSet attributeSet){
@@ -32,6 +39,8 @@ public class TitleLayout extends LinearLayout {
                     mDraw.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.item_search:
+                    mDraw.closeDrawer(GravityCompat.START);
+                    Toast.makeText(context,"请点击右上角搜索按钮",Toast.LENGTH_LONG).show();
                     break;
                 case R.id.item_label:
                     break;
@@ -46,7 +55,7 @@ public class TitleLayout extends LinearLayout {
             }
             return true;
         });
-
-
     }
+
+
 }

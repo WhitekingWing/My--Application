@@ -12,15 +12,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class AddChangeItemActivity extends AppCompatActivity{
+public class AddChangeItemActivity extends AppCompatActivity {
 
     public static final int RESULT_CODE_SUCCESS = 666;
     private int position;
     private String status;
     private String bookShelf;
+    private String law;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,11 +38,12 @@ public class AddChangeItemActivity extends AppCompatActivity{
         status = this.getIntent().getStringExtra("status");
         bookShelf = this.getIntent().getStringExtra("bookShelf");
         String notes = this.getIntent().getStringExtra("notes");
-        String law = this.getIntent().getStringExtra("law");
         String hyperlink = this.getIntent().getStringExtra("hyperlink");
         String content = this.getIntent().getStringExtra("content");
+        int mark = this.getIntent().getIntExtra("mark",-1);
         Spinner spinner_one = findViewById(R.id.Spinner_one);
         Spinner spinner_two = findViewById(R.id.Spinner_two);
+        Spinner spinner_three = findViewById(R.id.Spinner_three);
         EditText editTextTitle=findViewById(R.id.edittext_book_item_title);
         EditText editTextAuthor=findViewById(R.id.edittext_book_item_author);
         EditText editTextTranslator=findViewById(R.id.edittext_book_item_translator);
@@ -49,13 +52,14 @@ public class AddChangeItemActivity extends AppCompatActivity{
         EditText editTextPubMonth = findViewById(R.id.edittext_book_item_pubMonth);
         EditText editTextISBN=findViewById(R.id.edittext_book_item_isbn);
         EditText editTextNotes = findViewById(R.id.edittext_book_item_note);
-        EditText editTextLaw = findViewById(R.id.edittext_book_item_label);
         EditText editTextHyperlink = findViewById(R.id.edittext_book_item_hyperlink);
         spinner_one.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String content = adapterView.getItemAtPosition(i).toString();
-                status = content;
+                if(!content.equals("")) {
+                    status = content;
+                }
             }
 
             @Override
@@ -67,7 +71,23 @@ public class AddChangeItemActivity extends AppCompatActivity{
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String content = adapterView.getItemAtPosition(i).toString();
-                bookShelf = content;
+                if(!content.equals("")) {
+                    bookShelf = content;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        spinner_three.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String content = adapterView.getItemAtPosition(i).toString();
+                if(!content.equals("")) {
+                    law = content;
+                }
             }
 
             @Override
@@ -92,7 +112,6 @@ public class AddChangeItemActivity extends AppCompatActivity{
             }
             editTextISBN.setText(ISBN);
             editTextNotes.setText(notes);
-            editTextLaw.setText(law);
             editTextHyperlink.setText(hyperlink);
         }
 
@@ -104,7 +123,14 @@ public class AddChangeItemActivity extends AppCompatActivity{
         buttonOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent();
+                Intent intent;
+                if(mark == 0) {
+                    intent = new Intent(AddChangeItemActivity.this, MainActivity.class);
+                }
+                else
+                {
+                    intent = new Intent();
+                }
                 Bundle bundle=new Bundle();
                 bundle.putString("title",editTextTitle.getText().toString());
                 bundle.putString("author",editTextAuthor.getText().toString());
@@ -120,12 +146,19 @@ public class AddChangeItemActivity extends AppCompatActivity{
                 bundle.putString("status",status);
                 bundle.putString("bookShelf",bookShelf);
                 bundle.putString("notes",editTextNotes.getText().toString());
-                bundle.putString("law",editTextLaw.getText().toString());
+                bundle.putString("law",law);
                 bundle.putString("hyperlink",editTextHyperlink.getText().toString());
                 bundle.putString("content",content);
+                bundle.putInt("resultCode",AddChangeItemActivity.RESULT_CODE_SUCCESS);
                 intent.putExtras(bundle);
                 setResult(RESULT_CODE_SUCCESS,intent);
-                AddChangeItemActivity.this.finish();
+                if(mark == 0) {
+                    startActivity(intent);
+                }
+                else
+                {
+                    AddChangeItemActivity.this.finish();
+                }
             }
         });
     }
