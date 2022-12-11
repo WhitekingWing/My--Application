@@ -12,11 +12,31 @@
         <item
             android:id="@+id/item_label"
             android:icon="@drawable/ic_label"
-            android:title="Law" />
+            android:title="Label" />
         <item
-            android:id="@+id/item_create"
-            android:icon="@drawable/ic_create"
-            android:title="Create new Label" />
+            android:id="@+id/item_label_first"
+            android:icon="@drawable/ic_dark_arrow"
+            android:title="@string/law_first" />
+        <item
+            android:id="@+id/item_label_second"
+            android:icon="@drawable/ic_dark_arrow"
+            android:title="@string/law_second" />
+        <item
+            android:id="@+id/item_label_third"
+            android:icon="@drawable/ic_dark_arrow"
+            android:title="@string/law_third" />
+        <item
+            android:id="@+id/item_label_fourth"
+            android:icon="@drawable/ic_dark_arrow"
+            android:title="@string/law_fourth" />
+        <item
+            android:id="@+id/item_label_fifth"
+            android:icon="@drawable/ic_dark_arrow"
+            android:title="@string/law_fifth" />
+        <item
+            android:id="@+id/item_label_six"
+            android:icon="@drawable/ic_dark_arrow"
+            android:title="@string/law_sixth" />
         <item
             android:id="@+id/item_setting"
             android:icon="@drawable/ic_setting"

@@ -14,7 +14,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="225dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/linearLayoutHide">
 
 
         </LinearLayout>
@@ -23,11 +24,27 @@
             android:layout_width="match_parent"
             android:layout_height="508dp"
             android:background="@color/blue"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/linearLayout"
+            >
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="505dp">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/floatingActionDeleteButton"
+                    android:layout_width="58dp"
+                    android:layout_height="57dp"
+                    android:clickable="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.05"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.035"
+                    android:background="@color/red"
+                    app:srcCompat="@drawable/ic_dark_delete" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/floatingActionEditButton"
@@ -89,6 +106,16 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.316"
                     app:srcCompat="@drawable/ic_drak_readingstatus" />
+
+                <TextView
+                    android:id="@+id/bookinfo"
+                    android:layout_width="351dp"
+                    android:layout_height="280dp"
+                    android:text="Null"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewReadingStatus" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -21,6 +21,7 @@ public class BookDetails implements Serializable {
         this.position = position;
     }
 
+
     public int getPosition() {
         return position;
     }

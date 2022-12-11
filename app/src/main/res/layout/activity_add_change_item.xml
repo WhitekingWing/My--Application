@@ -15,8 +15,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:orientation="vertical"
-        >
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,8 +50,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="horizontal"
-            >
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="126dp"
@@ -78,10 +78,11 @@
                 tools:layout_editor_absoluteY="217dp" />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="horizontal"
-            >
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="125dp"
@@ -108,10 +109,11 @@
                 tools:layout_editor_absoluteY="217dp" />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="horizontal"
-            >
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="125dp"
@@ -138,10 +140,11 @@
                 tools:layout_editor_absoluteY="217dp" />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="horizontal"
-            >
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="127dp"
@@ -161,7 +164,7 @@
                 android:layout_width="51dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:inputType="number"
                 android:text="2010"
                 tools:ignore="TouchTargetSizeCheck"
                 tools:layout_editor_absoluteX="165dp"
@@ -181,7 +184,7 @@
                 android:layout_width="51dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:inputType="number"
                 android:text="05"
                 tools:ignore="TouchTargetSizeCheck"
                 tools:layout_editor_absoluteX="165dp"
@@ -190,13 +193,20 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="horizontal"
-            >
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="127dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/button_isbn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="识别条形码" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/textViewISBN"
@@ -211,7 +221,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:inputType="number"
                 android:text="9787511802057"
                 tools:ignore="TouchTargetSizeCheck"
                 tools:layout_editor_absoluteX="165dp"
@@ -237,47 +247,47 @@
 
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textViewGrayLine"
+            <ImageView
+                android:id="@+id/divide_line"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="——————————————————————————————————————"
-                android:textColor="@color/gray"
-                android:textStyle="bold"
-                tools:layout_editor_absoluteX="97dp"
-                tools:layout_editor_absoluteY="225dp" />
+                android:layout_height="2dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/black" />
 
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="52dp"
             android:orientation="horizontal">
 
 
             <LinearLayout
-                android:layout_width="48dp"
+                android:layout_width="76dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/imageViewReadingStatus"
-                    android:layout_width="64dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="97dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/ic_readingstatus" />
             </LinearLayout>
 
             <Spinner
                 android:id="@+id/Spinner_one"
-                android:layout_width="348dp"
+                android:layout_width="329dp"
                 android:layout_height="wrap_content"
                 android:entries="@array/ReadingStatus"
                 android:spinnerMode="dropdown"
@@ -285,9 +295,10 @@
 
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="53dp"
             android:orientation="horizontal">
 
 
@@ -295,19 +306,19 @@
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/imageViewBookShelfNum"
                     android:layout_width="64dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/ic_bookshelf" />
             </LinearLayout>
 
             <Spinner
                 android:id="@+id/Spinner_two"
-                android:layout_width="348dp"
+                android:layout_width="329dp"
                 android:layout_height="wrap_content"
                 android:entries="@array/BookShelfNumber"
                 android:spinnerMode="dropdown"
@@ -327,7 +338,7 @@
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -340,36 +351,21 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
                         <ImageView
                             android:id="@+id/imageViewNote"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="38dp"
                             android:layout_weight="1"
                             app:srcCompat="@drawable/ic_note" />
-
                     </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
 
-                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
 
             <EditText
                 android:id="@+id/edittext_book_item_note"
-                android:layout_width="348dp"
+                android:layout_width="329dp"
                 android:layout_height="50dp"
                 android:inputType="textPersonName"
                 android:text="Notes"
@@ -380,9 +376,10 @@
 
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:orientation="horizontal">
 
 
@@ -390,59 +387,38 @@
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <LinearLayout
+                    <ImageView
+                        android:id="@+id/imageViewLabel"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical">
+                        app:srcCompat="@drawable/ic_label" />
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:id="@+id/imageViewLabel"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            app:srcCompat="@drawable/ic_label" />
-
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
 
             <Spinner
                 android:id="@+id/Spinner_three"
-                android:layout_width="348dp"
-                android:layout_height="wrap_content"
+                android:layout_width="329dp"
+                android:layout_height="43dp"
                 android:entries="@array/Label"
                 android:spinnerMode="dropdown"
                 tools:ignore="TouchTargetSizeCheck" />
 
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="58dp"
             android:orientation="horizontal">
 
 
@@ -450,20 +426,12 @@
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -479,23 +447,16 @@
                             app:srcCompat="@drawable/ic_hyperlink" />
 
                     </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
 
             <EditText
                 android:id="@+id/edittext_book_item_hyperlink"
-                android:layout_width="348dp"
+                android:layout_width="328dp"
                 android:layout_height="50dp"
-                android:inputType="textPersonName"
-                android:text="https://www.baidu.com"
+                android:inputType="textUri"
+                android:text="https://jike.xyz/img/qr/ma_wifi_code_apikey.jpg"
                 android:textColor="@color/gray"
                 tools:ignore="TouchTargetSizeCheck"
                 tools:layout_editor_absoluteX="165dp"

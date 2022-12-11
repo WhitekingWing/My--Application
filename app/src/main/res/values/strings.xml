@@ -19,4 +19,11 @@
     <string name="edit_book_item_name">Edit Book Detail</string>
     <string name="status_first">Reading</string>
     <string name="status_second">Idle</string>
+    <string name="law_first">Law</string>
+    <string name="law_second">Childhood</string>
+    <string name="law_third">Animal</string>
+    <string name="law_fourth">Space</string>
+    <string name="law_fifth">Computer</string>
+    <string name="law_sixth">Humorous</string>
+    <string name="setting_name">Setting</string>
 </resources>

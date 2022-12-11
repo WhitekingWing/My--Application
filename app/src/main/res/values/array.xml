@@ -12,8 +12,7 @@
         <item>The Third BookShelf</item>
         <item>The Fourth BookShelf</item>
     </string-array>
-    <string-array name="ToolBarBookShelf">
-        <item>       </item>
+    <string-array name="ToolBarBookShelf" translatable="true">
         <item>Default BookShelf</item>
         <item>The First BookShelf</item>
         <item>The Second BookShelf</item>
@@ -21,11 +20,17 @@
         <item>The Fourth BookShelf</item>
     </string-array>
     <string-array name="Label">
-        <item>Law</item>
-        <item>Childhood</item>
-        <item>Animal</item>
-        <item>Space</item>
-        <item>Humorous</item>
-        <item>Computer</item>
+        <item></item>
+        <item>@string/law_first</item>
+        <item>@string/law_second</item>
+        <item>@string/law_third</item>
+        <item>@string/law_fourth</item>
+        <item>@string/law_fifth</item>
+        <item>@string/law_sixth</item>
+    </string-array>
+    <string-array name="Theme">
+        <item></item>
+        <item>Dark</item>
+        <item>Light</item>
     </string-array>
 </resources>

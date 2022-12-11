@@ -2,54 +2,48 @@ package com.example.myapplication;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.ContentView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.app.INotificationSideChannel;
 import android.text.InputFilter;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import com.example.myapplication.data.DataSaver;
 import com.example.myapplication.data.BookDetails;
-import com.example.myapplication.data.DownFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     public static final int MENU_ID_ADD = 1;
     public static final int MENU_ID_UPDATE = 2;
@@ -175,6 +169,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Intent intent1 = new Intent(MainActivity.this,MainActivity.class);
         startActivity(intent1);
     }
+    public  void deleteData(int position)
+    {
+        bookDetails.remove(position);
+        new DataSaver().Save(MainActivity.this,bookDetails);
+        finish();
+        Intent intent1 = new Intent(MainActivity.this,MainActivity.class);
+        startActivity(intent1);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,6 +187,63 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             actionBar.hide();
         }
         RecyclerView recyclerViewMain=findViewById(R.id.recycleview_main);
+        mDraw = (DrawerLayout) findViewById(R.id.drawer_layout);
+        findViewById(R.id.imageButtonMenu).setOnClickListener(v -> {
+            //打开滑动菜单  左侧出现
+            mDraw.openDrawer(GravityCompat.START);
+        });
+        navView = findViewById(R.id.nav_view);
+        //导航菜单点击
+        navView.setNavigationItemSelectedListener(item -> {
+            int count;
+            switch (item.getItemId()) {
+                case R.id.item_books:
+                    //关闭滑动菜单
+                    mDraw.closeDrawer(GravityCompat.START);
+                    break;
+                case R.id.item_search:
+                    mDraw.closeDrawer(GravityCompat.START);
+                    showDialog("（书名或者标签）");
+                    break;
+                case R.id.item_label:
+                    mDraw.closeDrawer(GravityCompat.START);
+                    showDialog("（标签）");
+                    break;
+                case R.id.item_label_first:
+                    mDraw.closeDrawer(GravityCompat.START);
+                    getLabel(R.string.law_first);
+                    break;
+                case R.id.item_label_second:
+                    mDraw.closeDrawer(GravityCompat.START);
+                    getLabel(R.string.law_second);
+                    break;
+                case R.id.item_label_third:
+                    mDraw.closeDrawer(GravityCompat.START);
+                    getLabel(R.string.law_third);
+                    break;
+                case R.id.item_label_fourth:
+                    mDraw.closeDrawer(GravityCompat.START);
+                    getLabel(R.string.law_fourth);
+                    break;
+                case R.id.item_label_fifth:
+                    mDraw.closeDrawer(GravityCompat.START);
+                    getLabel(R.string.law_fifth);
+                    break;
+                case R.id.item_label_six:
+                    mDraw.closeDrawer(GravityCompat.START);
+                    getLabel(R.string.law_sixth);
+                    break;
+                case R.id.item_setting:
+                    Intent intent = new Intent(this,SettingActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.item_about:
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        });
 
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -202,26 +261,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             if(this.getIntent().getExtras().getInt("resultCode") == AddChangeItemActivity.RESULT_CODE_SUCCESS) {
                 updateData(this.getIntent());
             }
+            else if(this.getIntent().getExtras().getInt("mark") == 2) {
+                 int position = this.getIntent().getExtras().getInt("position");
+                deleteData(position);
+            }
         }
         FloatingActionButton addBotton = findViewById(R.id.floatingActionButton_add);
-        addBotton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.putExtra("position",0);
-                intent.putExtra("content",content);
-                intent.putExtra("mark",1);
-                intent.setClass(MainActivity.this, AddChangeItemActivity.class);
-                addDataLauncher.launch(intent);
-            }
-        });
+        addBotton.setOnClickListener(this);
         ImageButton imageButtonSearch = findViewById(R.id.imageButtonSearch);
-        imageButtonSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDialog();
-            }
-        });
+        imageButtonSearch.setOnClickListener(this);
         if(content == null)
         {
             content = "Default BookShelf";
@@ -231,14 +279,59 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mainRecycleViewAdapter= new MainRecycleViewAdapter(bookCopy);
         recyclerViewMain.setAdapter(mainRecycleViewAdapter);
     }
-    public void showDialog()
+    public void getLabel(int resId)
+    {
+        int count;
+        search = getString(resId);
+        count = 0;
+        for(int j = 0;j < bookDetails.size();j++)
+        {
+            if(bookCopy.size() > 0) {
+                bookCopy.remove(count);
+                mainRecycleViewAdapter.notifyItemRemoved(count);
+            }
+        }
+        for(int j = 0;j < bookDetails.size();j++)
+        {
+            if(bookDetails.get(j).getBookShelf().equals(content) || content.equals("Default BookShelf") || content.equals("")) {
+                if(search != null && (bookDetails.get(j).getTitle().contains(search) || bookDetails.get(j).getLaw().contains(search))) {
+                    bookCopy.add(bookDetails.get(j));
+                    mainRecycleViewAdapter.notifyItemInserted(count);
+                    count++;
+                }
+                else if(search == null || search.equals(" ")){
+                    bookCopy.add(bookDetails.get(j));
+                    mainRecycleViewAdapter.notifyItemInserted(count);
+                    count++;
+                }
+            }
+        }
+    }
+    @Override
+    public void onClick(View view)
+    {
+        switch (view.getId()){
+            case R.id.imageButtonSearch:
+                showDialog("（书名或者标签）");
+                break;
+            case R.id.floatingActionButton_add:
+                Intent intent = new Intent();
+                intent.putExtra("position",0);
+                intent.putExtra("content",content);
+                intent.putExtra("mark",1);
+                intent.setClass(MainActivity.this, AddChangeItemActivity.class);
+                addDataLauncher.launch(intent);
+                break;
+        }
+    }
+    public void showDialog(String check)
     {
         final EditText input = new EditText(this);
         input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setIcon(R.drawable.ic_search).setView(input).setNegativeButton("取消",null);
         builder.setTitle("搜索框");
-        builder.setMessage("请输入搜索内容:");
+        builder.setMessage("请输入搜索内容:" + check);
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -358,11 +451,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         int loadedCount = -1;
         private ArrayList<BookDetails> localDataSet;
         boolean cancel = true;
+        //private ImageView imageView;
         /**
          * Provide a reference to the type of views that you are using
          * (custom ViewHolder).
          */
-        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener{
             private final TextView textViewTitle;
             private final ImageView imageViewImage;
             private final TextView textViewAuthor;
@@ -382,6 +476,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     @Override
                     public void onClick(View view) {
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        if(loadedCount == getAdapterPosition())
+                        {
+                            loadedCount = -1;
+                        }
                         if (loadedCount != getAdapterPosition() || loadedCount == -1) {
                             if(loadedFragment == null && cancel)
                             {
@@ -410,7 +508,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         }
                         if(loadedCount != getAdapterPosition() && loadedFragment != null && !cancel)
                         {
-                            transaction.hide(loadedFragment);
+                            transaction.remove(loadedFragment);
                             loadedFragment = null;
                             loadedCount = -1;
                             cancel = true;
@@ -420,7 +518,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 });
                 view.setOnCreateContextMenuListener(this);
             }
-
             public TextView getTextViewTitle() {
                 return textViewTitle;
             }
@@ -448,9 +545,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             @Override
             public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-                contextMenu.add(0,MENU_ID_ADD,getAdapterPosition(),"Add "+getAdapterPosition());
-                contextMenu.add(0,MENU_ID_UPDATE,getAdapterPosition(),"Update "+getAdapterPosition());
-                contextMenu.add(0,MENU_ID_DELETE,getAdapterPosition(),"Delete "+getAdapterPosition());
+//                contextMenu.add(0,MENU_ID_DELETE,getAdapterPosition(),"Delete "+getAdapterPosition());
             }
         }
 
@@ -475,14 +570,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             return new ViewHolder(view);
         }
 
-        private void changeFragment(androidx.fragment.app.Fragment fragment) {
-            FragmentManager manager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = manager.beginTransaction();
-            fragmentTransaction.replace(R.id.rl_fragment_container, fragment);
-            fragmentTransaction.commit();
-            fragmentTransaction.show(fragment);
-        }
-        // Replace the contents of a view (invoked by the layout manager)
+//        private void changeFragment(androidx.fragment.app.Fragment fragment) {
+//            FragmentManager manager = getSupportFragmentManager();
+//            FragmentTransaction fragmentTransaction = manager.beginTransaction();
+//            fragmentTransaction.replace(R.id.rl_fragment_container, fragment);
+//            fragmentTransaction.commit();
+//            fragmentTransaction.show(fragment);
+//        }
+//        // Replace the contents of a view (invoked by the layout manager)
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 
@@ -493,13 +588,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 //                if (localDataSet.get(position).getBookShelf().equals(content) || content.equals("Default BookShelf")) {
                     viewHolder.getTextViewTitle().setText(localDataSet.get(position).getTitle());
                     //viewHolder.getTextViewPrice().setText(localDataSet.get(position).getPrice().toString());
-                    if (localDataSet.get(position).getStatus().equals("Idle")) {
-                        viewHolder.getImageViewImage().setImageResource(R.drawable.home);
-                    } else {
-                        viewHolder.getImageViewImage().setImageResource(R.drawable.folder);
+                        //viewHolder.getImageViewImage().setImageResource(R.drawable.home);
+                    URL url = null;
+                    try {
+                        //url = new URL(localDataSet.get(position).getHyperlink());
+                        url = new URL(localDataSet.get(position).getHyperlink());
+                        requestImg(url,viewHolder.getImageViewImage());
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
                     }
                     viewHolder.getTextViewAuthor().setText(localDataSet.get(position).getAuthor() + " 著");
-                    viewHolder.getTextViewPublisher().setText(" , " + localDataSet.get(position).getPublisher());
+                    viewHolder.getTextViewPublisher().setText(localDataSet.get(position).getPublisher());
                     viewHolder.getTextViewPubYear().setText(Integer.toString(localDataSet.get(position).getPubYear()));
                     viewHolder.getTextViewPubMonth().setText(Integer.toString(localDataSet.get(position).getPubMonth()));
 //                }
@@ -511,6 +610,31 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         @Override
         public int getItemCount() {
             return localDataSet.size();
+        }
+
+        private void requestImg(final URL imgUrl,ImageView imageView)
+        {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = BitmapFactory.decodeStream(imgUrl.openStream());
+
+                        showImg(bitmap,imageView);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
+        private void showImg(final Bitmap bitmap,ImageView imageView){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    imageView.setImageBitmap(bitmap);
+                }
+            });
         }
     }
 }
