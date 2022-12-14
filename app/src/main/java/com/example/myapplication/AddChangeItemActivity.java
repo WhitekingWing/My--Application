@@ -61,6 +61,7 @@ public class AddChangeItemActivity extends AppCompatActivity {
     EditText editTextHyperlink;
     BookDetails temp;
     Button button_isbn;
+    int loadCount = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +84,7 @@ public class AddChangeItemActivity extends AppCompatActivity {
         editTextNotes = findViewById(R.id.edittext_book_item_note);
         editTextHyperlink = findViewById(R.id.edittext_book_item_hyperlink);
         position= this.getIntent().getIntExtra("position",0);
+        loadCount = this.getIntent().getIntExtra("loadCount",0);
         String title=this.getIntent().getStringExtra("title");
         String author = this.getIntent().getStringExtra("author");
         String translator = this.getIntent().getStringExtra("translator");
@@ -195,13 +197,7 @@ public class AddChangeItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent;
-                if(mark == 0) {
-                    intent = new Intent(AddChangeItemActivity.this, MainActivity.class);
-                }
-                else
-                {
-                    intent = new Intent();
-                }
+                intent = new Intent();
                 Bundle bundle=new Bundle();
                 bundle.putString("title",editTextTitle.getText().toString());
                 bundle.putString("author",editTextAuthor.getText().toString());
@@ -210,6 +206,7 @@ public class AddChangeItemActivity extends AppCompatActivity {
                 bundle.putString("publisher",editTextPublisher.getText().toString());
                 int pubYear = Integer.parseInt(editTextPubYear.getText().toString());
                 bundle.putInt("pubYear",pubYear);
+                bundle.putInt("loadCount",loadCount);
                 int pubMonth = Integer.parseInt(editTextPubMonth.getText().toString());
                 bundle.putInt("pubMonth",pubMonth);
                 String ISBN = editTextISBN.getText().toString();
@@ -223,13 +220,7 @@ public class AddChangeItemActivity extends AppCompatActivity {
                 bundle.putInt("resultCode",AddChangeItemActivity.RESULT_CODE_SUCCESS);
                 intent.putExtras(bundle);
                 setResult(RESULT_CODE_SUCCESS,intent);
-                if(mark == 0) {
-                    startActivity(intent);
-                }
-                else
-                {
-                    AddChangeItemActivity.this.finish();
-                }
+                finish();
             }
         });
     }

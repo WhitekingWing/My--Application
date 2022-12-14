@@ -71,23 +71,7 @@ public class DownFragment extends androidx.fragment.app.Fragment {
             editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intentUpdate=new Intent(getActivity(), AddChangeItemActivity.class);
-                    intentUpdate.putExtra("position",bundle.getInt("position"));
-                    intentUpdate.putExtra("title",bundle.getString("title"));
-                    intentUpdate.putExtra("author",bundle.getString("author"));
-                    intentUpdate.putExtra("translator",bundle.getString("translator"));
-                    intentUpdate.putExtra("publisher",bundle.getString("publisher"));
-                    intentUpdate.putExtra("pubYear",bundle.getInt("pubYear"));
-                    intentUpdate.putExtra("pubMonth",bundle.getInt("pubMonth"));
-                    intentUpdate.putExtra("ISBN",bundle.getString("ISBN"));
-                    intentUpdate.putExtra("status",readingStatus);
-                    intentUpdate.putExtra("bookShelf",bookShelf);
-                    intentUpdate.putExtra("notes",notes);
-                    intentUpdate.putExtra("law",bundle.getString("law"));
-                    intentUpdate.putExtra("hyperlink",bundle.getString("hyperlink"));
-                    intentUpdate.putExtra("content",bundle.getString("content"));
-                    intentUpdate.putExtra("mark",0);
-                    startActivity(intentUpdate);
+                    listener.setData("update," + bundle.getInt("position") + ","+ bundle.getInt("loadCount"));
                 }
             });
             FloatingActionButton floatingActionDeleteButton = view.findViewById(R.id.floatingActionDeleteButton);

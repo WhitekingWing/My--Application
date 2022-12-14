@@ -17,10 +17,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -56,12 +59,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ArrayList<BookDetails> bookCopyThird;
     private ArrayList<BookDetails> bookCopyFourth;
     private MainRecycleViewAdapter mainRecycleViewAdapter;
+
+
+
     private DrawerLayout mDraw;
     private NavigationView navView;//导航视图
     String content = "Default BookShelf";
     String search;
+    boolean click = true;
     DownFragment loadedFragment = null;
     int loadedCount = -1;
+    MenuItem menuItem;
     private ActivityResultLauncher<Intent> addDataLauncher= registerForActivityResult(new ActivityResultContracts.StartActivityForResult()
             ,result -> {
                 if(null!=result){
@@ -138,12 +146,40 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         //bookDetails.get(position).setPrice(price);
                         new DataSaver().Save(this,bookDetails);
                         //mainRecycleViewAdapter.notifyItemChanged(position);
-                        finish();
-                        Intent intent1 = new Intent(MainActivity.this,MainActivity.class);
-                        startActivity(intent1);
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.remove(loadedFragment);
+                        loadedFragment = new DownFragment();
+                        loadedCount = bundle.getInt("loadCount");
+                        bundle = new Bundle();
+                        bundle.putString("title",bookCopy.get(loadedCount).getTitle());
+                        bundle.putString("author",bookCopy.get(loadedCount).getAuthor());
+                        bundle.putInt("position",bookCopy.get(loadedCount).getPosition());
+                        bundle.putString("translator",bookCopy.get(loadedCount).getTranslator());
+                        bundle.putString("publisher",bookCopy.get(loadedCount).getPublisher());
+                        bundle.putInt("pubYear",bookCopy.get(loadedCount).getPubYear());
+                        bundle.putInt("pubMonth",bookCopy.get(loadedCount).getPubMonth());
+                        bundle.putString("ISBN",bookCopy.get(loadedCount).getISBN());
+                        bundle.putString("status",bookCopy.get(loadedCount).getStatus());
+                        bundle.putString("bookShelf",bookCopy.get(loadedCount).getBookShelf());
+                        bundle.putString("notes",bookCopy.get(loadedCount).getNotes());
+                        bundle.putString("law",bookCopy.get(loadedCount).getLaw());
+                        bundle.putString("hyperlink",bookCopy.get(loadedCount).getHyperlink());
+                        bundle.putString("content",content);
+                        bundle.putInt("loadCount",loadedCount);
+                        loadedFragment.setArguments(bundle);
+                        transaction.add(R.id.layout_container, loadedFragment);
+                        transaction.show(loadedFragment);
+                        transaction.commit();
+                        if(!bookDetails.get(position).getBookShelf().equals(content))
+                        {
+                            mainRecycleViewAdapter.notifyItemRemoved(loadedCount);
+                            bookCopy.remove(loadedCount);
+                        }
                     }
                 }
             });
+
+
     void updateData(Intent intent)
     {
         Bundle bundle=intent.getExtras();
@@ -184,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void setData(String text) {
         String []get = text.split(",");
-        if(get[0].contains("delete"))
+        if(get[0].equals("delete"))
         {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.remove(loadedFragment);
@@ -200,6 +236,28 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
             new DataSaver().Save(MainActivity.this,bookDetails);
             mainRecycleViewAdapter.notifyItemRemoved(Integer.parseInt(get[2]));
+        }
+        else if(get[0].equals("update"))
+        {
+            Intent intentUpdate=new Intent(this, AddChangeItemActivity.class);
+            intentUpdate.putExtra("position",Integer.parseInt(get[1]));
+            intentUpdate.putExtra("title",bookDetails.get(Integer.parseInt(get[1])).getTitle());
+            intentUpdate.putExtra("price",bookDetails.get(Integer.parseInt(get[1])).getPrice());
+            intentUpdate.putExtra("author",bookDetails.get(Integer.parseInt(get[1])).getAuthor());
+            intentUpdate.putExtra("translator",bookDetails.get(Integer.parseInt(get[1])).getTranslator());
+            intentUpdate.putExtra("publisher",bookDetails.get(Integer.parseInt(get[1])).getPublisher());
+            intentUpdate.putExtra("pubYear",bookDetails.get(Integer.parseInt(get[1])).getPubYear());
+            intentUpdate.putExtra("pubMonth",bookDetails.get(Integer.parseInt(get[1])).getPubMonth());
+            intentUpdate.putExtra("ISBN",bookDetails.get(Integer.parseInt(get[1])).getISBN());
+            intentUpdate.putExtra("status",bookDetails.get(Integer.parseInt(get[1])).getStatus());
+            intentUpdate.putExtra("bookShelf",bookDetails.get(Integer.parseInt(get[1])).getBookShelf());
+            intentUpdate.putExtra("notes",bookDetails.get(Integer.parseInt(get[1])).getNotes());
+            intentUpdate.putExtra("law",bookDetails.get(Integer.parseInt(get[1])).getLaw());
+            intentUpdate.putExtra("hyperlink",bookDetails.get(Integer.parseInt(get[1])).getHyperlink());
+            intentUpdate.putExtra("content",content);
+            intentUpdate.putExtra("loadCount",Integer.parseInt(get[1]));
+            intentUpdate.putExtra("mark",1);
+            updateDataLauncher.launch(intentUpdate);
         }
         if(text.equals("hide"))
         {
@@ -227,6 +285,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             mDraw.openDrawer(GravityCompat.START);
         });
         navView = findViewById(R.id.nav_view);
+        navView.getMenu().findItem(R.id.item_label_first).setVisible(false);
+        navView.getMenu().findItem(R.id.item_label_second).setVisible(false);
+        navView.getMenu().findItem(R.id.item_label_third).setVisible(false);
+        navView.getMenu().findItem(R.id.item_label_fourth).setVisible(false);
+        navView.getMenu().findItem(R.id.item_label_fifth).setVisible(false);
+        navView.getMenu().findItem(R.id.item_label_six).setVisible(false);
+        navView.getMenu().findItem(R.id.item_label).setTitle("Label(展开）");
         //导航菜单点击
         navView.setNavigationItemSelectedListener(item -> {
             int count;
@@ -240,8 +305,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     showDialog("（书名或者标签）");
                     break;
                 case R.id.item_label:
-                    mDraw.closeDrawer(GravityCompat.START);
-                    showDialog("（标签）");
+                    if(!click) {
+                        navView.getMenu().findItem(R.id.item_label_first).setVisible(false);
+                        navView.getMenu().findItem(R.id.item_label_second).setVisible(false);
+                        navView.getMenu().findItem(R.id.item_label_third).setVisible(false);
+                        navView.getMenu().findItem(R.id.item_label_fourth).setVisible(false);
+                        navView.getMenu().findItem(R.id.item_label_fifth).setVisible(false);
+                        navView.getMenu().findItem(R.id.item_label_six).setVisible(false);
+                        navView.getMenu().findItem(R.id.item_label).setTitle("Label(展开）");
+                    }
+                    else
+                    {
+                        navView.getMenu().findItem(R.id.item_label_first).setVisible(true);
+                        navView.getMenu().findItem(R.id.item_label_second).setVisible(true);
+                        navView.getMenu().findItem(R.id.item_label_third).setVisible(true);
+                        navView.getMenu().findItem(R.id.item_label_fourth).setVisible(true);
+                        navView.getMenu().findItem(R.id.item_label_fifth).setVisible(true);
+                        navView.getMenu().findItem(R.id.item_label_six).setVisible(true);
+                        navView.getMenu().findItem(R.id.item_label).setTitle("Label");
+                    }
+                    click = !click;
                     break;
                 case R.id.item_label_first:
                     mDraw.closeDrawer(GravityCompat.START);
@@ -278,7 +361,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
             return true;
         });
-
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewMain.setLayoutManager(linearLayoutManager);
@@ -302,12 +384,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spinner.setOnItemSelectedListener(this);
         mainRecycleViewAdapter= new MainRecycleViewAdapter(bookCopy);
         recyclerViewMain.setAdapter(mainRecycleViewAdapter);
-        if(this.getIntent() != null && this.getIntent().getExtras() != null)
-        {
-            if(this.getIntent().getExtras().getInt("resultCode") == AddChangeItemActivity.RESULT_CODE_SUCCESS) {
-                updateData(this.getIntent());
-            }
-        }
     }
     public void getLabel(int resId)
     {
