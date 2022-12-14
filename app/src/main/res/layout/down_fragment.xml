@@ -18,6 +18,12 @@
             android:id="@+id/linearLayoutHide">
 
 
+            <Button
+                android:id="@+id/button_hide"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/touming"
+                android:text="  " />
         </LinearLayout>
 
         <LinearLayout

@@ -32,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -43,7 +44,7 @@ import com.example.myapplication.data.BookDetails;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener,DownFragment.ChangeListener {
 
     public static final int MENU_ID_ADD = 1;
     public static final int MENU_ID_UPDATE = 2;
@@ -59,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private NavigationView navView;//导航视图
     String content = "Default BookShelf";
     String search;
+    DownFragment loadedFragment = null;
+    int loadedCount = -1;
     private ActivityResultLauncher<Intent> addDataLauncher= registerForActivityResult(new ActivityResultContracts.StartActivityForResult()
             ,result -> {
                 if(null!=result){
@@ -82,10 +85,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         String hyperlink = bundle.getString("hyperlink");
                         content = bundle.getString("content");
                         bookDetails.add(position, new BookDetails(title,R.drawable.ic_launcher_background,author,translator,publisher,pubYear,pubMonth,ISBN,status,bookShelf,notes,law,hyperlink,position) );
+                        bookCopy.add(0, new BookDetails(title,R.drawable.ic_launcher_background,author,translator,publisher,pubYear,pubMonth,ISBN,status,bookShelf,notes,law,hyperlink,position) );
+                        for(int i = 0;i < bookDetails.size();i++)
+                        {
+                            bookDetails.get(i).setPosition(i);
+                        }
                         new DataSaver().Save(this,bookDetails);
-                        finish();
-                        Intent intent1 = new Intent(MainActivity.this,MainActivity.class);
-                        startActivity(intent1);
+                        if(bookShelf.equals(content) || content.equals("Default BookShelf")) {
+                            for (int i = 0;i < bookCopy.size();i++)
+                            {
+                                bookCopy.get(i).setPosition(i);
+                            }
+                            mainRecycleViewAdapter.notifyItemInserted(0);
+                        }
                     }
                 }
             });
@@ -169,14 +181,36 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Intent intent1 = new Intent(MainActivity.this,MainActivity.class);
         startActivity(intent1);
     }
-    public  void deleteData(int position)
-    {
-        bookDetails.remove(position);
-        new DataSaver().Save(MainActivity.this,bookDetails);
-        finish();
-        Intent intent1 = new Intent(MainActivity.this,MainActivity.class);
-        startActivity(intent1);
+    @Override
+    public void setData(String text) {
+        String []get = text.split(",");
+        if(get[0].contains("delete"))
+        {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.remove(loadedFragment);
+            transaction.commit();
+            loadedFragment = null;
+            loadedCount = -1;
+            bookDetails.remove(Integer.parseInt(get[1]));
+            bookCopy.remove(Integer.parseInt(get[2]));
+            for(int i = 0;i < bookCopy.size();i++)
+            {
+                bookCopy.get(i).setPosition(i);
+                bookDetails.get(i).setPosition(i);
+            }
+            new DataSaver().Save(MainActivity.this,bookDetails);
+            mainRecycleViewAdapter.notifyItemRemoved(Integer.parseInt(get[2]));
+        }
+        if(text.equals("hide"))
+        {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.remove(loadedFragment);
+            transaction.commit();
+            loadedFragment = null;
+            loadedCount = -1;
+        }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -256,16 +290,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             bookDetails.get(i).setPosition(i);
             bookCopy.get(i).setPosition(i);
         }
-        if(this.getIntent() != null && this.getIntent().getExtras() != null)
-        {
-            if(this.getIntent().getExtras().getInt("resultCode") == AddChangeItemActivity.RESULT_CODE_SUCCESS) {
-                updateData(this.getIntent());
-            }
-            else if(this.getIntent().getExtras().getInt("mark") == 2) {
-                 int position = this.getIntent().getExtras().getInt("position");
-                deleteData(position);
-            }
-        }
         FloatingActionButton addBotton = findViewById(R.id.floatingActionButton_add);
         addBotton.setOnClickListener(this);
         ImageButton imageButtonSearch = findViewById(R.id.imageButtonSearch);
@@ -278,6 +302,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spinner.setOnItemSelectedListener(this);
         mainRecycleViewAdapter= new MainRecycleViewAdapter(bookCopy);
         recyclerViewMain.setAdapter(mainRecycleViewAdapter);
+        if(this.getIntent() != null && this.getIntent().getExtras() != null)
+        {
+            if(this.getIntent().getExtras().getInt("resultCode") == AddChangeItemActivity.RESULT_CODE_SUCCESS) {
+                updateData(this.getIntent());
+            }
+        }
     }
     public void getLabel(int resId)
     {
@@ -319,6 +349,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 intent.putExtra("position",0);
                 intent.putExtra("content",content);
                 intent.putExtra("mark",1);
+                if(!content.equals("Default BookShelf")) {
+                    intent.putExtra("bookShelf", content);
+                }
                 intent.setClass(MainActivity.this, AddChangeItemActivity.class);
                 addDataLauncher.launch(intent);
                 break;
@@ -447,10 +480,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleViewAdapter.ViewHolder> {
-        DownFragment loadedFragment = null;
-        int loadedCount = -1;
         private ArrayList<BookDetails> localDataSet;
-        boolean cancel = true;
         //private ImageView imageView;
         /**
          * Provide a reference to the type of views that you are using
@@ -476,43 +506,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     @Override
                     public void onClick(View view) {
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                        if(loadedCount == getAdapterPosition())
-                        {
-                            loadedCount = -1;
-                        }
-                        if (loadedCount != getAdapterPosition() || loadedCount == -1) {
-                            if(loadedFragment == null && cancel)
-                            {
-                                loadedFragment = new DownFragment();
-                                Bundle bundle = new Bundle();
-                                loadedCount = getAdapterPosition();
-                                bundle.putString("title",localDataSet.get(loadedCount).getTitle());
-                                bundle.putString("author",localDataSet.get(loadedCount).getAuthor());
-                                bundle.putInt("position",localDataSet.get(loadedCount).getPosition());
-                                bundle.putString("translator",localDataSet.get(loadedCount).getTranslator());
-                                bundle.putString("publisher",localDataSet.get(loadedCount).getPublisher());
-                                bundle.putInt("pubYear",localDataSet.get(loadedCount).getPubYear());
-                                bundle.putInt("pubMonth",localDataSet.get(loadedCount).getPubMonth());
-                                bundle.putString("ISBN",localDataSet.get(loadedCount).getISBN());
-                                bundle.putString("status",localDataSet.get(loadedCount).getStatus());
-                                bundle.putString("bookShelf",localDataSet.get(loadedCount).getBookShelf());
-                                bundle.putString("notes",localDataSet.get(loadedCount).getNotes());
-                                bundle.putString("law",localDataSet.get(loadedCount).getLaw());
-                                bundle.putString("hyperlink",localDataSet.get(loadedCount).getHyperlink());
-                                bundle.putString("content",content);
-                                loadedFragment.setArguments(bundle);
-                                transaction.add(R.id.layout_container, loadedFragment);
-                                transaction.show(loadedFragment);
-                                cancel = false;
-                            }
-                        }
-                        if(loadedCount != getAdapterPosition() && loadedFragment != null && !cancel)
-                        {
-                            transaction.remove(loadedFragment);
-                            loadedFragment = null;
-                            loadedCount = -1;
-                            cancel = true;
-                        }
+                        loadedFragment = new DownFragment();
+                        Bundle bundle = new Bundle();
+                        loadedCount = getAdapterPosition();
+                        bundle.putString("title",localDataSet.get(loadedCount).getTitle());
+                        bundle.putString("author",localDataSet.get(loadedCount).getAuthor());
+                        bundle.putInt("position",localDataSet.get(loadedCount).getPosition());
+                        bundle.putString("translator",localDataSet.get(loadedCount).getTranslator());
+                        bundle.putString("publisher",localDataSet.get(loadedCount).getPublisher());
+                        bundle.putInt("pubYear",localDataSet.get(loadedCount).getPubYear());
+                        bundle.putInt("pubMonth",localDataSet.get(loadedCount).getPubMonth());
+                        bundle.putString("ISBN",localDataSet.get(loadedCount).getISBN());
+                        bundle.putString("status",localDataSet.get(loadedCount).getStatus());
+                        bundle.putString("bookShelf",localDataSet.get(loadedCount).getBookShelf());
+                        bundle.putString("notes",localDataSet.get(loadedCount).getNotes());
+                        bundle.putString("law",localDataSet.get(loadedCount).getLaw());
+                        bundle.putString("hyperlink",localDataSet.get(loadedCount).getHyperlink());
+                        bundle.putString("content",content);
+                        bundle.putInt("loadCount",loadedCount);
+                        loadedFragment.setArguments(bundle);
+                        transaction.add(R.id.layout_container, loadedFragment);
+                        transaction.show(loadedFragment);
                         transaction.commit();
                     }
                 });

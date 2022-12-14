@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,10 +41,12 @@ public class DownFragment extends androidx.fragment.app.Fragment {
     TextView contentTextView;
     String expand = "[展开]";
     String collapse = "[收起]";
+    private ChangeListener listener;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.down_fragment, null);
             Bundle bundle = getArguments();
+            view.setClickable(true);
             readingStatus = bundle.getString("status");
             bookShelf = bundle.getString("bookShelf");
             notes = bundle.getString("notes");
@@ -90,7 +93,7 @@ public class DownFragment extends androidx.fragment.app.Fragment {
             FloatingActionButton floatingActionDeleteButton = view.findViewById(R.id.floatingActionDeleteButton);
             floatingActionDeleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View delete_view) {
                     AlertDialog alertDialog;
                     alertDialog = new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.confirmation)
@@ -98,10 +101,7 @@ public class DownFragment extends androidx.fragment.app.Fragment {
                             .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    Intent intentDelete=new Intent(getActivity(), MainActivity.class);
-                                    intentDelete.putExtra("mark",2);
-                                    intentDelete.putExtra("position",bundle.getInt("position"));
-                                    startActivity(intentDelete);
+                                    listener.setData("delete," + bundle.getInt("position") + ","+ bundle.getInt("loadCount"));
                                 }
                             }).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
@@ -112,7 +112,29 @@ public class DownFragment extends androidx.fragment.app.Fragment {
                     alertDialog.show();
                 }
             });
+            Button button = view.findViewById(R.id.button_hide);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.setData("hide");
+                }
+            });
             return view;
+    }
+    public interface ChangeListener
+    {
+        void setData(String text);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            listener = (ChangeListener) context;
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void expandText() {
